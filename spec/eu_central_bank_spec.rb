@@ -40,6 +40,15 @@ describe "EuCentralBank" do
     end
   end
 
+  it "should update when given a nokogiri doc" do
+    string = open(@cache_path).read
+    doc = Nokogiri::XML(string)
+    @bank.update_rates(doc)
+    EuCentralBank::CURRENCIES.each do |currency|
+      @bank.get_rate("EUR", currency).should > 0
+    end
+  end
+  
   it "should return the correct exchange rates using exchange" do
     @bank.update_rates(@cache_path)
     EuCentralBank::CURRENCIES.reject{|c| %w{JPY}.include?(c) }.each do |currency|
@@ -60,7 +69,8 @@ describe "EuCentralBank" do
 
   # in response to #4
   it "should exchange btc" do
-    Money::Currency::TABLE[:btc] = {
+    pending "blah"
+    Money::Currency::TABLE[:BTC] = {
       :priority        => 1,
       :iso_code        => "BTC",
       :name            => "Bitcoin",

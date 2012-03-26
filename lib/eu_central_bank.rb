@@ -45,7 +45,7 @@ class EuCentralBank < Money::Bank::VariableExchange
 
   def exchange_rates(cache=nil)
     rates_source = !!cache ? cache : ECB_RATES_URL
-    doc = Nokogiri::XML(open(rates_source))
+    doc = rates_source.kind_of?(Nokogiri::XML::Document) ? rates_source : Nokogiri::XML(open(rates_source))
     doc.xpath('gesmes:Envelope/xmlns:Cube/xmlns:Cube//xmlns:Cube')
   end
 
